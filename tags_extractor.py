@@ -23,19 +23,21 @@ def main():
     dir_tags_extractor = DirTagsExtractor(file_tags_extractor)
     os_separator = ByKnownItemsSeparator(known_operating_systems)
     arch_separator = ByKnownItemsSeparator(known_architecture)
+    
     tags = dir_tags_extractor.extract(args.dir_path)
     operating_systems, other = os_separator.extract(tags)
     architectures,other = arch_separator.extract(other)
+    
+    # The remaining tags can create all possible combinations 
     all_other_combinations = combinations_extractor(other)
-    print(all_other_combinations)
+    
+    # We can try without operating system or architecture
     operating_systems.extend([''])
     architectures.extend([''])
 
-    all_possible_combination = []
     for operating_system in operating_systems:
         for arch in architectures:
             for combination in all_other_combinations:
-                # all_possible_combination.extend([(operating_system, arch)+combination])
                 new_combination = (operating_system, arch)+combination
                 print([new_combination[i] for i in range(len(new_combination))])
 
